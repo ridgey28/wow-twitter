@@ -1,0 +1,8 @@
+var $j=jQuery;$j(document).ready(function($){$j('#wowt_log').hide();var wow_p,wow_nonce,wow_action,ajo=ajax_object;function call_ajax(wow_p,wow_action,wow_nonce){var data={action:wow_action,info:wow_p,nonce:wow_nonce};$j.post(ajo.ajax_url,data,function(response){$j('#wowt_log').show('1000',function(){$j(this).html(response);});});}
+$j('#wowt_debug').click(function(){wow_p=ajo.show_logs;wow_nonce=ajo.options_show_nonce;call_ajax(wow_p,"show_logs",wow_nonce);});$j('#wowt_clear_log').click(function(){wow_p=ajo.delete_logs;wow_nonce=ajo.options_delete_nonce;call_ajax(wow_p,"remove_logs",wow_nonce);});$j('#wowt_check_status').click(function(){wow_p=ajo.check_status;wow_nonce=ajo.options_check_nonce;call_ajax(wow_p,"check_status",wow_nonce);$j('html, body').animate({scrollTop:$(".wow_anchor").offset().top},400);});$j('#wowt_hide_debug').click(function(){$j('#wowt_log').hide('1000');});$('.error').each(function(i,obj){if($j(obj).attr("id")=="setting-error-wow_max_tweets"){$j("#max_tweets").addClass("wow_error");}
+if($j(obj).attr("id")=="setting_error-wow_name_long"||$j(obj).attr("id")=="setting_error-wow_user_name"){$j("#username").addClass("wow_error");}
+if($j(obj).attr("id")=="setting-error-wow_cons_key"){$j("#cons_key").addClass("wow_error");}
+if($j(obj).attr("id")=="setting-error-wow_cons_secret"){$j("#cons_secret").addClass("wow_error");}
+if($j(obj).attr("id")=="setting-error-wow_user_token"){$j("#user_token").addClass("wow_error");}
+if($j(obj).attr("id")=="setting-error-wow_user_secret"){$j("#user_secret").addClass("wow_error");}
+if($j(obj).attr("id")=="setting-error-wow_json_update"){$j("#json_update").addClass("wow_error");}});});
