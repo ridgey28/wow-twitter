@@ -1,29 +1,37 @@
 <?php if (!defined('ABSPATH')) die ('No direct access allowed');
 /*
  Plugin Name: WOW-Twitter
- Plugin URI: http://www.worldoweb.co.uk/
+ Plugin URI: http://www.worldoweb.co.uk/2013/wow-twitter-wordpress-plugin-release
  Description: Display your latest tweets via a widget and/or shortcode using SSL. Optional badge for single pages. Automatic backup included with debugging feature in admin.
- Version: 1.0
+ Version: 1.1
  Author: Tracy Ridge
  Author URI: http://www.worldoweb.co.uk/
  License: GPL2
  */
- 
+
  /***
  *Global Paths and variables
  ***/
-$options = get_option('wow_twitter'); 
- 
-define('WOW_TWITTER_VERS', '1.0');
+$options = get_option('wow_twitter');
+
+define('WOW_TWITTER_VERS', '1.1');
 define('WOW_TWITTER', plugin_dir_path(__FILE__));
 include WOW_TWITTER . 'display_tweets.php';
 include WOW_TWITTER . 'widgets/widget.php';
 include WOW_TWITTER . 'admin/admin_functions.php';
 
+require 'plugin-update-checker/plugin-update-checker.php';
+$className = PucFactory::getLatestClassVersion('PucGitHubChecker');
+$myUpdateChecker = new $className(
+    'https://github.com/ridgey28/wow-twitter/',
+    __FILE__,
+    'master'
+);
+
 /***
 * Check plugin dependencies to see if compatible - used in activation
 ***/
-function wow_chk_depen() {	
+function wow_chk_depen() {
 	global $wp_version;
 	$plugin_data = get_plugin_data( __FILE__, false );
 	$php_min_version = '5.3';
@@ -40,9 +48,9 @@ function wow_chk_depen() {
 
 	if ( !function_exists( $curl ) )
 		$errors[] = "Please install $curl to run this plugin.";
-	
+
 	if ( version_compare( $wp_version, $require_wp, "<" ) )
-		$errors[] = "$name requires WordPress $require_wp or higher.  Please upgrade WordPress and try again";	
+		$errors[] = "$name requires WordPress $require_wp or higher.  Please upgrade WordPress and try again";
 
 	return $errors;
 }
@@ -76,10 +84,10 @@ function wow_twitter_failed_activation()
  * Show admin notice after theme activation if no error has ocurred
 ***/
 
-function wow_twitter_admin_notice() {	
+function wow_twitter_admin_notice() {
 	global $current_user;
 	$user_id = $current_user->ID;
-	
+
 	/* Check that the user hasn't already clicked to ignore the message */
 	if ( ! get_user_meta($user_id, 'wow_twitter_ignore_notice') ) {
 			echo '<div class="updated"><p>';
@@ -139,7 +147,7 @@ function wow_twitter_remove_feature() {
 /***
  * Register Deactivation Hook
  ***/
- 
+
 function wow_twitter_deactivate() {
 	if ( ! current_user_can( 'activate_plugins' ) )
 		return;
@@ -151,7 +159,7 @@ function wow_twitter_deactivate() {
 /***
  * Register Uninstall Hook
  ***/
- 
+
 function wow_twitter_uninstall() {
 	if ( ! current_user_can( 'activate_plugins' ) )
 		return;
@@ -193,9 +201,9 @@ register_activation_hook(__FILE__, 'wow_twitter_activation');
 if ( ! empty ( $GLOBALS['pagenow'] ) && 'plugins.php' === $GLOBALS['pagenow'] ) {
 	//get error messages, if any
 	$errors = get_option('wow_twitter_failed_activation');
-	
+
 	//if errors is empty display admin notice, checks only one field as this wouldn't have any values set on activation
-	if(empty($errors)){ 
+	if(empty($errors)){
 		if (empty($options['wow_cons_key'])){
 				add_action('admin_notices', 'wow_twitter_admin_notice', 0);//add the admin notice
 			}
@@ -203,7 +211,7 @@ if ( ! empty ( $GLOBALS['pagenow'] ) && 'plugins.php' === $GLOBALS['pagenow'] ) 
 	else{
 			//if an error exists display an admin notice with error
 			add_action('admin_notices','wow_twitter_failed_activation',0);
-		}	
+		}
 }//end if
 add_action('admin_init', 'wow_twitter_nag_ignore');
 add_filter('plugin_action_links', 'wow_twitter_action_links', 10, 2);
