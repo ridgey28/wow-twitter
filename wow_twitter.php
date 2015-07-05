@@ -8,22 +8,39 @@
  Author URI: http://www.worldoweb.co.uk/
  License: GPL2
  */
- 
+
  /***
  *Global Paths and variables
  ***/
-$options = get_option('wow_twitter'); 
- 
+$options = get_option('wow_twitter');
+
 define('WOW_TWITTER_VERS', '1.0');
 define('WOW_TWITTER', plugin_dir_path(__FILE__));
 include WOW_TWITTER . 'display_tweets.php';
 include WOW_TWITTER . 'widgets/widget.php';
 include WOW_TWITTER . 'admin/admin_functions.php';
+include WOW_TWITTER . 'updater.php';
 
+if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
+    $config = array(
+        'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+        'proper_folder_name' => 'plugin-name', // this is the name of the folder your plugin lives in
+        'api_url' => 'https://github.com/ridgey28/wow-twitter', // the GitHub API url of your GitHub repo
+        'raw_url' => 'https://raw.github.com/ridgey28/wow-twitter/master', // the GitHub raw url of your GitHub repo
+        'github_url' => 'https://github.com/ridgey28/wow-twitter', // the GitHub url of your GitHub repo
+        'zip_url' => 'https://github.com/ridgey28/wow-twitter/zipball/master', // the zip url of the GitHub repo
+        'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+        'requires' => '3.1', // which version of WordPress does your plugin require?
+        'tested' => '4.2.2', // which version of WordPress is your plugin tested up to?
+        'readme' => 'README.md', // which file to use as the readme for the version number
+        'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+    );
+    new WP_GitHub_Updater($config);
+}
 /***
 * Check plugin dependencies to see if compatible - used in activation
 ***/
-function wow_chk_depen() {	
+function wow_chk_depen() {
 	global $wp_version;
 	$plugin_data = get_plugin_data( __FILE__, false );
 	$php_min_version = '5.3';
@@ -40,9 +57,9 @@ function wow_chk_depen() {
 
 	if ( !function_exists( $curl ) )
 		$errors[] = "Please install $curl to run this plugin.";
-	
+
 	if ( version_compare( $wp_version, $require_wp, "<" ) )
-		$errors[] = "$name requires WordPress $require_wp or higher.  Please upgrade WordPress and try again";	
+		$errors[] = "$name requires WordPress $require_wp or higher.  Please upgrade WordPress and try again";
 
 	return $errors;
 }
@@ -76,10 +93,10 @@ function wow_twitter_failed_activation()
  * Show admin notice after theme activation if no error has ocurred
 ***/
 
-function wow_twitter_admin_notice() {	
+function wow_twitter_admin_notice() {
 	global $current_user;
 	$user_id = $current_user->ID;
-	
+
 	/* Check that the user hasn't already clicked to ignore the message */
 	if ( ! get_user_meta($user_id, 'wow_twitter_ignore_notice') ) {
 			echo '<div class="updated"><p>';
@@ -139,7 +156,7 @@ function wow_twitter_remove_feature() {
 /***
  * Register Deactivation Hook
  ***/
- 
+
 function wow_twitter_deactivate() {
 	if ( ! current_user_can( 'activate_plugins' ) )
 		return;
@@ -151,7 +168,7 @@ function wow_twitter_deactivate() {
 /***
  * Register Uninstall Hook
  ***/
- 
+
 function wow_twitter_uninstall() {
 	if ( ! current_user_can( 'activate_plugins' ) )
 		return;
@@ -193,9 +210,9 @@ register_activation_hook(__FILE__, 'wow_twitter_activation');
 if ( ! empty ( $GLOBALS['pagenow'] ) && 'plugins.php' === $GLOBALS['pagenow'] ) {
 	//get error messages, if any
 	$errors = get_option('wow_twitter_failed_activation');
-	
+
 	//if errors is empty display admin notice, checks only one field as this wouldn't have any values set on activation
-	if(empty($errors)){ 
+	if(empty($errors)){
 		if (empty($options['wow_cons_key'])){
 				add_action('admin_notices', 'wow_twitter_admin_notice', 0);//add the admin notice
 			}
@@ -203,7 +220,7 @@ if ( ! empty ( $GLOBALS['pagenow'] ) && 'plugins.php' === $GLOBALS['pagenow'] ) 
 	else{
 			//if an error exists display an admin notice with error
 			add_action('admin_notices','wow_twitter_failed_activation',0);
-		}	
+		}
 }//end if
 add_action('admin_init', 'wow_twitter_nag_ignore');
 add_filter('plugin_action_links', 'wow_twitter_action_links', 10, 2);
