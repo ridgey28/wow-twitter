@@ -1,15 +1,15 @@
 === WOW-Twitter ===
 Contributors: ridgey28
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HTDDUX2FL4DS6 
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HTDDUX2FL4DS6
 Tags: Social Media, Twitter, Widget, Badge, Admin
 Requires at least: 3.1
-Tested up to: 3.6
-Stable tag: 1.0
+Tested up to: 4.2.2
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
-A highly configurable Twitter Plugin for WordPress with automatic backup feature and much more! 
+A highly configurable Twitter Plugin for WordPress with automatic backup feature and much more!
 
 == Description ==
 
@@ -24,12 +24,19 @@ The plugin will log and display any errors encountered in the admin area and you
 The plugin uses the latest Secure Twitter 1.1 API
 
 == Changelog ==
- 
-* Initial Release
+
+V1.1
+
+Updated certificate
+
+Updated tmhOAuth script
+
+Integrated automatic update from github within WP dashboard with https://github.com/YahnisElsts/plugin-update-checker
+
 
 == Installation ==
 
-Extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page.  
+Extract the zip file and just drop the contents in the wp-content/plugins/ directory of your WordPress installation and then activate the Plugin from Plugins page. From Version 1.1 you can automatically install from GitHub within the WordPress admin but will require manual installation first.
 
 == Frequently Asked Questions ==
 
@@ -68,5 +75,4 @@ You can style to your own taste using '#wow_twitter .tweet'.  The widget uses mi
 3. Badge displayed under post in single file.
 
 == Upgrade Notice ==
-
-No Upgrade as yet 
+Updated to 1.1
