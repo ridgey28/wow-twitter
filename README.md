@@ -1,6 +1,5 @@
 wow_twitter
 ===========
-~Current Version:1.4~
 
 A Feature + WordPress Twitter Plugin
 
@@ -23,3 +22,5 @@ The backup feature automatically runs once a week in the background. If the Twit
 <h2>Feature Requests or Bugs</h2>
 Please feel free to request any new features or to submit any bugs, if found. You can find further support on my blog
 http://www.worldoweb.co.uk/2013/wow-twitter-wordpress-plugin-release
+
+
